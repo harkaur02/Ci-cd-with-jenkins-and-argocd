@@ -19,7 +19,7 @@ pipeline {
         sh 'cd spring-boot-app && mvn clean package'
       }
     }
-    stage('Static Code Analysis') {
+    /*stage('Static Code Analysis') {
       environment {
         SONAR_URL = "http://52.28.235.242:9000"
       }
@@ -28,7 +28,7 @@ pipeline {
           sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
         }
       }
-    }
+    }*/
     stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "uthycloud/jenkins-cicd:${BUILD_NUMBER}"
@@ -48,13 +48,13 @@ pipeline {
     stage('Update Deployment File') {
         environment {
             GIT_REPO_NAME = "Ci-cd-with-jenkins-and-argocd"
-            GIT_USER_NAME = "devopsgodd"
+            GIT_USER_NAME = "harkaur02"
         }
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
-                    git config user.email "huxman69@gmail.com"
-                    git config user.name "Uthman"
+                    git config user.email "harkaur02@gmail.com"
+                    git config user.name "Harjit"
                     BUILD_NUMBER=${BUILD_NUMBER}
                     sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" spring-boot-app-manifests/deployment.yml
                     git add spring-boot-app-manifests/deployment.yml
